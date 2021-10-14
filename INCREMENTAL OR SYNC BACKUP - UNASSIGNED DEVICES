@@ -1,0 +1,316 @@
+#!/bin/bash
+#PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+arrayStarted=true
+
+
+# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES PLUGIN ----
+# LINK: 
+# AUTHOR: BRAULIO DIAS RIBEIRO
+# -------------------------------------------------------------------
+
+
+# DESCRIPTION -------------------------------------------------------
+# This script make backup to PLUG & PLAY devices or FIXED devices and make incremental or sync backup.
+#
+# PLUG & PLAY DEVICES
+# You connect the device into usb, the "Unassigned Devices Plugin" mount, make backup, and unmount.
+# Incremental backup:
+# 	The frequency is when you plug the device into USB.
+# Sync backup:
+# 	The frequency is defined in "Day_Sync" variable of the script.
+#
+# FIXED DEVICES
+# The devices are already connected but not mounted. The script mount, make backup, and unmount.
+# Incremental backup:
+# 	You need creat a script and schedule backup frequency in "CA User Scripts -> Schedule Disabled". Example: "Schedule Daily" or "Schedule Weekly".
+#	This schedule is from the incremental backup.
+# Sync backup:
+# 	The frequency is defined in "Day_Sync" variable of the script.
+#
+# INCREMENTAL BAKUP: Don't delete anything from the backup directory, just copy new or modified files.
+#
+# SYNC BACKUP: Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
+#
+# END DESCRIPTION----------------------------------------------------
+
+
+# HOW IT WORKS? -----------------------------------------------------
+#
+# I'LL EXPLAIN HOW THE SCRIPT WORKS AND GIVE AN EXAMPLE.
+#	You need install "Unassigned Devices" and "Unassigned Devices Plus (UD+)" plugins
+#		https://forums.unraid.net/topic/92462-unassigned-devices-managing-disk-drives-and-remote-shares-outside-of-the-unraid-array/
+#	You need install "CA User Scripts" plugin
+#		https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/
+#
+#	The script automatically creates two files in the directory typed in "Src_Dir".
+#	The "LOG-LAST-SYNC-BKP.txt" file saves the date of the last synchronized backup.
+#	The file "LOG-BKP.txt" contains the information that will be sent in the e-mail typed in the "Send_Email" variable.
+#
+# 	The variables "TRANSLATE THIS VARIABLES TO YOUR LANGUAGE" are used in the script.
+# 	Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
+#
+#
+# 	THE "St_On_Off" VARIABLE TURNS THE SCRIPT on OR off (TEST MODE).
+#
+#
+# 	You need a script for each device. Change the settings in "CONFIGURATION VARIABLES".
+#	The script use the partition name (LABEL) to make backup. Don't use the same names even if they are different devices.
+# 	Let's use a .txt file to enter all the paths you want to backup.
+# 	The .txt file name is "PATHS" (uppercase all).
+#	Save the "PATHS.txt" file in the desired directory.
+# 	Open "PATHS.txt" file and type all the paths you want to backup.
+# 	Type a path per line and add "/***" in the end of each line. The "***" is to copy all subfolders of this directory.
+#	If you're copying just the subdirectory, you'll need to enter the parent directory first without "***".
+#		Example below: parent directory "Video/" and subdirectory "Video/Action" and "Video/Comedy".
+#	The default folder to copy the files is /mnt/user/. This's where you create UNRAID shares. So you just need to type the rest of the way (source).
+#	When the backup finishes, you'll be notified by the email that is configured in the "Send_Email" variable.
+# 	Enter the path of the directory that containing "PATHS.txt" file in the "Src_Dir" variable.
+#
+#
+# EXAMPLE OF USE
+#	Created a script named "bkp_ud_HDPD-AUT_0000000000004E49" through the CA User Scripts https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/
+# 	Used the script folder itself to save the "PATHS.txt" file.
+# 	Typed all the paths in "PATHS.txt" file and copy to the script folder created. I used the unraid terminal to copy.
+#
+# 		File Name: "PATHS.txt"
+# 			Braulio/***
+#			  Financial/***
+#			  Music/***
+# 			Photo/***
+# 			Video/
+# 			Video/Action/***
+# 			Video/Comedy/***
+#
+# 		Attention
+# 			Don't type the path between quotes.   Right: Video/Comedy/***  Wrong: "Video/Comedy/***"
+# 			Don't type the path between slashes.  Right: Video/Comedy/***  Wrong: /Video/Comedy/***  Wrong: Video/Comedy/***/  Wrong: /Video/Comedy/***/
+#
+#		  To copy everything from the folder:
+# 		  cp -R /mnt/user/FOLDER-LOCATION-WITH-YOUR-FILES/* /boot/config/plugins/user.scripts/scripts/NAME-OF-YOUR-SCRIPT/
+#		  To copy only the "PATHS.txt" file that you wanna:
+#			  cp -R /mnt/user/FOLDER-LOCATION-WITH-YOUR-FILES/PATHS.txt /boot/config/plugins/user.scripts/scripts/NAME-OF-YOUR-SCRIPT/
+#
+# 		NAME-OF-YOUR-SCRIPT: in my case "bkp_ud_HDPD-AUT_0000000000004E49"
+#			FOLDER-LOCATION-WITH-YOUR-FILES: in my case "Scripts"
+#
+#
+# 	Edited "CONFIGURATION VARIABLES"
+#
+# 	St_On_Off=1
+# 	Src_Dir="/boot/config/plugins/user.scripts/scripts/bkp_ud_HDPD-AUT_0000000000004E49"
+# 	Day_Sync=30
+#		Send_Email="test@gmail.com"
+#
+#		LABEL="500GB"
+#		SERIAL="HDPD-AUT_0000000000004E49"
+#		PARTITION="sda1"
+#
+# END HOW IT WORKS? -------------------------------------------------
+
+
+
+#####################################################################
+#				   	            CONFIGURATION VARIABLES						          #
+#####################################################################
+
+# CHANGE THIS VARIABLES ---------------------------------------------
+St_On_Off=0
+ 		# 0 disable backup, 1 enable backup. Set 0 to put this script into test mode. Nothing will be copied or deleted.
+
+Src_Dir="/boot/config/plugins/user.scripts/scripts/bkp_ud_HDPD-AUT_0000000000004E49"
+ 		# Patch of .txt file. Type between "" with / begin and without / end
+
+Day_Sync=30
+		# PLUG & PLAY DEVICE
+ 		# Sync backup: 0 disable, x enable. "Day_Sync" is how often the script will sync (mirroring) backup
+ 		# Incremental backup: the frequency is when you plug the device into USB
+		#
+ 		# FIXED DEVICE
+ 		# Sync backup: 0 disable, x enable. "Day_Sync" is how often the script will sync (mirroring) backup
+ 		# Incremental backup: the frequency is scheduled in "CA User Scripts -> Schedule Disabled"
+
+Send_Email="test@gmail.com"
+    # Send email to. Type between ""
+# END CHANGE THIS VARIABLES -----------------------------------------
+
+
+# CHANGE THIS VARIABLES ONLY FIXED DEVICE ---------------------------
+#LABEL="500GB"						            # Label device
+#SERIAL="HDPD-AUT_0000000000004E49"   # Serial number device
+#PARTITION="sda1"					            # Device partition on unraid "/dev/sdX"
+									                    # At the terminal, type "fdisk -l" to see all devices and partition
+# END CHANGE THIS VARIABLES ONLY FIXED DEVICE -----------------------
+
+
+# TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
+# These variables are used in the script.
+# Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
+
+#Msg_Device="Device"
+#Msg_Date="Date"
+
+#Msg_Bkp_Type_Incr="Type = Incremental"
+#Msg_Bkp_Type_Sync="Type = Synchronized"
+
+#Msg_Bkp_On="Status: Backup performed successfully"
+#Msg_Bkp_Off="Status: Backup disabled. Run in test mode"
+
+#Msg_Mount1="Attention! Error starting backup"
+#Msg_Mount2="The device hasn't been mounted"
+#Msg_Mount3="Contact the IT team"
+
+#Msg_Unmount1="Attention! Error finishing backup"
+#Msg_Unmount2="The device hasn't been unmounted"
+#Msg_Unmount3="Contact the IT team"
+#Msg_Unmount4="DON'T REMOVE THE BACKUP DEVICE IF IT'S CONNECTED INTO USB"
+
+#Msg_Error1="Attention! Backup not configured for this device"
+#Msg_Error2="Contact the IT team"
+
+#Msg_Mail_Header="Server Backup"
+# END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
+
+#####################################################################
+#				   	         END CONFIGURATION VARIABLES						        #
+#####################################################################
+
+
+
+#####################################################################
+#					            HERE THE PROGRAMMING BEGINS						        #
+#					                DON'T CHANGE ANYTHING						          #
+#####################################################################
+
+# INCREMENTAL AND SYNC BACKUP ---------------------------------------
+Func-Incr-Sync() {
+	Func-Mount
+	
+	# Read the file with the date of the last backup in the YYYY-MM-DD format
+	Log_Last_Sync_Bkp=$(sed '$q' "${Src_Dir}/LOG-LAST-SYNC-BKP.txt")
+	
+	# Test whether the file exists or is empty
+	if [ ! -f "${Src_Dir}/LOG-LAST-SYNC-BKP.txt" ] || [ -z "${Log_Last_Sync_Bkp}" ]; then
+		# Save the date of the last backup (today) in the YYYY-MM-DD format
+		echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+	fi
+	
+	if [ -n "${Day_Sync}" ] && [ "${Day_Sync}" -ne 0 ]; then
+		# Difference in days. The calculation is in seconds (Today_Date - Log_Last_Sync_Bkp)
+		let Dif_Date=($(date +%s -d ${Today_Date})-$(date +%s -d ${Log_Last_Sync_Bkp}))/86400
+		
+		# Test if the current date is the backup scheduled date
+		if [ "${Dif_Date}" -ge "${Day_Sync}" ]; then
+			St_Sync_Bkp=1
+		fi
+	fi
+	
+	Func-Rsync
+}
+# END INCREMENTAL AND SYNC BACKUP -----------------------------------
+
+
+# FUNCTION RSYNC ----------------------------------------------------
+Func-Rsync() {
+	Rsync_Config=("-avih" "--stats")
+	
+	if [ -n "${St_Sync_Bkp}" ] && [ "${St_Sync_Bkp}" -eq "1" ]; then
+		Rsync_Config+=("--delete")
+		echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+		echo "${Msg_Bkp_Type_Sync}" >> ${Src_Dir}/LOG-BKP.txt
+	else
+		echo "${Msg_Bkp_Type_Incr}" >> ${Src_Dir}/LOG-BKP.txt
+	fi
+	
+	if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ]; then
+		Rsync_Config+=("--dry-run")
+		echo "${Msg_Bkp_Off}" >> ${Src_Dir}/LOG-BKP.txt
+	else
+		echo "${Msg_Bkp_On}" >> ${Src_Dir}/LOG-BKP.txt
+	fi
+	
+	Rsync_Config+=("--include-from=${Src_Dir}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
+	rsync ${Rsync_Config[@]}
+	Func-Unmount
+}
+# END FUNCTION RSYNC ------------------------------------------------
+
+
+# FUNCTION MOUNT ----------------------------------------------------
+Func-Mount() {
+	# Check if drive mounted
+	if [ ! -d "/mnt/disks/${LABEL}" ]; then
+		
+		if [ -n "${St_Mnt_Unm}" ] && [ "${St_Mnt_Unm}" -eq "1" ]; then
+			echo "" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Mount1}" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Mount2}" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Mount3}" >> ${Src_Dir}/LOG-BKP.txt
+			Func-Send-Email
+			exit 1
+		else
+			St_Mnt_Unm=1
+			DEVICE="/dev/${PARTITION}"
+			#Disk_Mount="ls -l /dev/disk/by-id/ | grep '$SERIAL' | head -1 | tail -c4"
+			#Disk_Mount="${Disk_Mount}1"
+			#mkdir "/mnt/disks/${LABEL}"
+			/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${DEVICE}"
+			sleep 5
+			Func-Mount
+		fi
+		
+	fi
+}
+# END FUNCTION MOUNT ------------------------------------------------
+
+
+# FUNCTION UNMOUNT --------------------------------------------------
+Func-Unmount() {
+	# Check if drive unmounted
+	if [ -d "/mnt/disks/${LABEL}" ]; then
+		Func-Send-Email
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
+		sleep 5
+	fi
+}
+# END FUNCTION UNMOUNT ----------------------------------------------
+
+
+# FUNCTION SEND E-MAIL ----------------------------------------------
+Func-Send-Email() {
+	sendmail ${Send_Email} < ${Src_Dir}/LOG-BKP.txt
+}
+# END FUNCTION SEND E-MAIL ------------------------------------------
+
+
+# FUNCTION LOG ------------------------------------------------------
+Func-Log() {
+	echo "From: ${Msg_Mail_Header}" > ${Src_Dir}/LOG-BKP.txt
+	echo "To: ${Send_Email}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "Subject: ${Msg_Device}: ${LABEL}" >> ${Src_Dir}/LOG-BKP.txt
+	
+	# Today date YYYY-MM-DD
+	Today_Date=$(date +%Y-%m-%d)
+	echo "${Msg_Device} = ${LABEL}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Date} = ${Today_Date}" >> ${Src_Dir}/LOG-BKP.txt
+}
+# END FUNCTION LOG --------------------------------------------------
+
+
+# MAIN --------------------------------------------------------------
+Func-Log
+if [ -n "${DEVICE}" ]; then
+	case "${ACTION}" in
+		'ADD')
+			Func-Incr-Sync
+		;;
+	esac
+elif [ -n "${LABEL}" ] && [ -n "${SERIAL}" ] && [ -n "${PARTITION}" ]; then
+	Func-Incr-Sync
+else
+	echo "" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Error1}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Error2}" >> ${Src_Dir}/LOG-BKP.txt
+	Func-Send-Email
+	exit 1
+fi
+# END MAIN ----------------------------------------------------------
