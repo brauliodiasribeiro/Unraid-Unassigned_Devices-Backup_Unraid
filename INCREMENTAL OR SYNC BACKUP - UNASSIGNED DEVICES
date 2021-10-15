@@ -237,8 +237,12 @@ Func-Rsync() {
 
 # FUNCTION MOUNT ----------------------------------------------------
 Func-Mount() {
+	if [ ! -n ${MOUNTPOINT} ]; then
+		MOUNTPOINT="/mnt/disks/${LABEL}"
+	fi
+	
 	# Check if drive mounted
-	if [ ! -d "/mnt/disks/${LABEL}" ]; then
+	if [ ! -d ${MOUNTPOINT} ]; then
 		
 		if [ -n "${St_Mnt_Unm}" ] && [ "${St_Mnt_Unm}" -eq "1" ]; then
 			echo "" >> ${Src_Dir}/LOG-BKP.txt
@@ -266,7 +270,7 @@ Func-Mount() {
 # FUNCTION UNMOUNT --------------------------------------------------
 Func-Unmount() {
 	# Check if drive unmounted
-	if [ -d "/mnt/disks/${LABEL}" ]; then
+	if [ -d ${MOUNTPOINT} ]; then
 		Func-Send-Email
 		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
 		sleep 5
