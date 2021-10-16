@@ -1,5 +1,3 @@
-# Unraid-Unassigned-Bkp
-
 This script make backup to PLUG & PLAY devices or FIXED devices and make incremental or sync backup.
 
 # PLUG & PLAY DEVICES
