@@ -1,6 +1,6 @@
 # Unraid-Unassigned-Bkp
 
-# This script make backup to PLUG & PLAY devices or FIXED devices and make incremental or sync backup.
+This script make backup to PLUG & PLAY devices or FIXED devices and make incremental or sync backup.
 #
 # PLUG & PLAY DEVICES
 # You connect the device into usb, the "Unassigned Devices Plugin" mount, make backup, and unmount.
