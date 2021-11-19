@@ -110,7 +110,7 @@ arrayStarted=true
 
 
 #####################################################################
-#				   	            CONFIGURATION VARIABLES						          #
+#			CONFIGURATION VARIABLES		   	    #
 #####################################################################
 
 # CHANGE THIS VARIABLES ---------------------------------------------
@@ -130,15 +130,15 @@ Day_Sync=30
  		# Incremental backup: the frequency is scheduled in "CA User Scripts -> Schedule Disabled"
 
 Send_Email="test@gmail.com"
-    # Send email to. Type between ""
+    		# Send email to. Type between ""
 # END CHANGE THIS VARIABLES -----------------------------------------
 
 
 # CHANGE THIS VARIABLES ONLY FIXED DEVICE ---------------------------
-#LABEL="500GB"						            # Label device
-#SERIAL="HDPD-AUT_0000000000004E49"   # Serial number device
-#PARTITION="sda1"					            # Device partition on unraid "/dev/sdX"
-									                    # At the terminal, type "fdisk -l" to see all devices and partition
+#LABEL="500GB"				# Label device
+#SERIAL="HDPD-AUT_0000000000004E49"   	# Serial number device
+#PARTITION="sda1"			# Device partition on unraid "/dev/sdX"
+					# At the terminal, type "fdisk -l" to see all devices and partition
 # END CHANGE THIS VARIABLES ONLY FIXED DEVICE -----------------------
 
 
@@ -171,14 +171,14 @@ Send_Email="test@gmail.com"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
-#				   	         END CONFIGURATION VARIABLES						        #
+#			END CONFIGURATION VARIABLES		    #
 #####################################################################
 
 
 
 #####################################################################
-#					            HERE THE PROGRAMMING BEGINS						        #
-#					                DON'T CHANGE ANYTHING						          #
+#			HERE THE PROGRAMMING BEGINS		    #
+#			   DON'T CHANGE ANYTHING		    #
 #####################################################################
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
