@@ -323,7 +323,7 @@ if [ -n "${DEVICE}" ]; then
 	
 	case "${ACTION}" in
 	'ADD')
-		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
+		if [ -n "${St_On_Off}" ] || [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
 			Func-Incr-Sync
 		else
 			Func-Error
@@ -333,7 +333,7 @@ if [ -n "${DEVICE}" ]; then
 	;;
 	esac
 	
-elif [ -n "${LABEL}" ] && [ -n "${SERIAL}" ] && [ -n "${PARTITION}" ] && [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
+elif [ -n "${LABEL}" ] && [ -n "${SERIAL}" ] && [ -n "${PARTITION}" ] && [ -n "${St_On_Off}" ] || [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
 	Func-Incr-Sync
 else
 	Func-Error
