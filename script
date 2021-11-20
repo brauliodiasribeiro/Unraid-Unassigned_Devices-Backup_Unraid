@@ -144,26 +144,25 @@ Send_Email="test@gmail.com"
 # These variables are used in the script.
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
 
-#Msg_Mail_Subject="Backup: ${LABEL}"
-#Msg_Device="Device"
-#Msg_Date="Date"
+Msg_Mail_Subject="Backup: ${LABEL}"
+Msg_Device="Device"
+Msg_Date="Date"
 
-#Msg_Bkp_Type_Incr="Type = Incremental"
-#Msg_Bkp_Type_Sync="Type = Synchronized"
+Msg_Bkp_Type_Incr="Type = Incremental"
+Msg_Bkp_Type_Sync="Type = Synchronized"
 
-#Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
+Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
 
-#Msg_Bkp_Finish_On="Status: Backup performed successfully"
-#Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were copied or deleted"
+Msg_Bkp_Finish_On="Status: Backup performed successfully"
+Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were copied or deleted"
 
-#Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
-#Msg_Unmount="Statuss: Error finishing backup. The device hasn't been unmounted"
+Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
 
-#Msg_Error="Status: Backup not configured for this device"
+Msg_Error="Status: Backup not configured for this device"
 
-#Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
-#Msg_Alert2="Disconnect the device from the USB"
-#Msg_Alert3="Contact the IT team"
+Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
+Msg_Alert2="Disconnect the device from the USB"
+Msg_Alert3="Contact the IT team"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
@@ -222,9 +221,12 @@ Func-Rsync() {
 	if [ -n "${St_Sync_Bkp}" ] && [ "${St_Sync_Bkp}" -eq "1" ]; then
 		
 		Rsync_Config+=("--delete")
+		
+		# Test if the script is enabled or in test mode
 		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
 			echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
 		fi
+		
 		echo "${Msg_Bkp_Type_Sync}" >> ${Src_Dir}/LOG-BKP.txt
 		
 	else
@@ -239,7 +241,7 @@ Func-Rsync() {
 	elif [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
 		echo "${Msg_Bkp_Finish_On}" >> ${Src_Dir}/LOG-BKP.txt
 		echo "" >> ${Src_Dir}/LOG-BKP.txt
-		echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt
+		echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt	
 	fi
 	
 	Rsync_Config+=("--include-from=${Src_Dir}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
@@ -269,9 +271,6 @@ Func-Mount() {
 		else
 			St_Mnt_Unm=1
 			DEVICE="/dev/${PARTITION}"
-			#Disk_Mount="ls -l /dev/disk/by-id/ | grep '$SERIAL' | head -1 | tail -c4"
-			#Disk_Mount="${Disk_Mount}1"
-			#mkdir "/mnt/disks/${LABEL}"
 			/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${DEVICE}"
 			Func-Mount
 		fi
