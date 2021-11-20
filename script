@@ -74,8 +74,8 @@ arrayStarted=true
 #
 # 		File Name: "PATHS.txt"
 # 			Braulio/***
-#			  Financial/***
-#			  Music/***
+#			Financial/***
+#			Music/***
 # 			Photo/***
 # 			Video/
 # 			Video/Action/***
@@ -117,7 +117,7 @@ arrayStarted=true
 St_On_Off=0
  		# 0 disable backup, 1 enable backup. Set 0 to put this script into test mode. Nothing will be copied or deleted.
 
-Src_Dir="/boot/config/plugins/user.scripts/scripts/bkp_ud_HDPD-AUT_0000000000004E49"
+Src_Dir="/boot/config/plugins/user.scripts/scripts/bkp_ud/bkp_ud_HDPD-AUT_0000000000004E49"
  		# Patch of .txt file. Type between "" with / begin and without / end
 
 Day_Sync=30
@@ -130,44 +130,40 @@ Day_Sync=30
  		# Incremental backup: the frequency is scheduled in "CA User Scripts -> Schedule Disabled"
 
 Send_Email="test@gmail.com"
-    		# Send email to. Type between ""
+		# Send email to. Type between ""
 # END CHANGE THIS VARIABLES -----------------------------------------
-
 
 # CHANGE THIS VARIABLES ONLY FIXED DEVICE ---------------------------
 #LABEL="500GB"				# Label device
-#SERIAL="HDPD-AUT_0000000000004E49"   	# Serial number device
+#SERIAL="HDPD-AUT_0000000000004E49"	# Serial number device
 #PARTITION="sda1"			# Device partition on unraid "/dev/sdX"
 					# At the terminal, type "fdisk -l" to see all devices and partition
 # END CHANGE THIS VARIABLES ONLY FIXED DEVICE -----------------------
-
 
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
 # These variables are used in the script.
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
 
+#Msg_Mail_Subject="Backup: ${LABEL}"
 #Msg_Device="Device"
 #Msg_Date="Date"
 
 #Msg_Bkp_Type_Incr="Type = Incremental"
 #Msg_Bkp_Type_Sync="Type = Synchronized"
 
-#Msg_Bkp_On="Status: Backup performed successfully"
-#Msg_Bkp_Off="Status: Backup disabled. Run in test mode"
+#Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
 
-#Msg_Mount1="Attention! Error starting backup"
-#Msg_Mount2="The device hasn't been mounted"
-#Msg_Mount3="Contact the IT team"
+#Msg_Bkp_Finish_On="Status: Backup performed successfully"
+#Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were copied or deleted"
 
-#Msg_Unmount1="Attention! Error finishing backup"
-#Msg_Unmount2="The device hasn't been unmounted"
-#Msg_Unmount3="Contact the IT team"
-#Msg_Unmount4="DON'T REMOVE THE BACKUP DEVICE IF IT'S CONNECTED INTO USB"
+#Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
+#Msg_Unmount="Statuss: Error finishing backup. The device hasn't been unmounted"
 
-#Msg_Error1="Attention! Backup not configured for this device"
-#Msg_Error2="Contact the IT team"
+#Msg_Error="Status: Backup not configured for this device"
 
-#Msg_Mail_Header="Server Backup"
+#Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
+#Msg_Alert2="Disconnect the device from the USB"
+#Msg_Alert3="Contact the IT team"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
@@ -185,13 +181,24 @@ Send_Email="test@gmail.com"
 Func-Incr-Sync() {
 	Func-Mount
 	
+	echo "${Msg_Bkp_Start}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Alert1}" >> ${Src_Dir}/LOG-BKP.txt
+	Func-Send-Email
+	Func-Log
+	
 	# Read the file with the date of the last backup in the YYYY-MM-DD format
 	Log_Last_Sync_Bkp=$(sed '$q' "${Src_Dir}/LOG-LAST-SYNC-BKP.txt")
 	
-	# Test whether the file exists or is empty
+	# Test if the file exists or is empty
 	if [ ! -f "${Src_Dir}/LOG-LAST-SYNC-BKP.txt" ] || [ -z "${Log_Last_Sync_Bkp}" ]; then
-		# Save the date of the last backup (today) in the YYYY-MM-DD format
-		echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+		
+		# Test if the script is enabled or in test mode
+		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
+			# Save the date of the last backup (today) in the YYYY-MM-DD format
+			echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+		fi
+		
 	fi
 	
 	if [ -n "${Day_Sync}" ] && [ "${Day_Sync}" -ne 0 ]; then
@@ -208,32 +215,39 @@ Func-Incr-Sync() {
 }
 # END INCREMENTAL AND SYNC BACKUP -----------------------------------
 
-
 # FUNCTION RSYNC ----------------------------------------------------
 Func-Rsync() {
 	Rsync_Config=("-avih" "--stats")
 	
 	if [ -n "${St_Sync_Bkp}" ] && [ "${St_Sync_Bkp}" -eq "1" ]; then
+		
 		Rsync_Config+=("--delete")
-		echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
+			echo "${Today_Date}" > ${Src_Dir}/LOG-LAST-SYNC-BKP.txt
+		fi
 		echo "${Msg_Bkp_Type_Sync}" >> ${Src_Dir}/LOG-BKP.txt
+		
 	else
 		echo "${Msg_Bkp_Type_Incr}" >> ${Src_Dir}/LOG-BKP.txt
 	fi
 	
 	if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ]; then
 		Rsync_Config+=("--dry-run")
-		echo "${Msg_Bkp_Off}" >> ${Src_Dir}/LOG-BKP.txt
-	else
-		echo "${Msg_Bkp_On}" >> ${Src_Dir}/LOG-BKP.txt
+		echo "${Msg_Bkp_Finish_Off}" >> ${Src_Dir}/LOG-BKP.txt
+		echo "" >> ${Src_Dir}/LOG-BKP.txt
+		echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt
+	elif [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
+		echo "${Msg_Bkp_Finish_On}" >> ${Src_Dir}/LOG-BKP.txt
+		echo "" >> ${Src_Dir}/LOG-BKP.txt
+		echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt
 	fi
 	
 	Rsync_Config+=("--include-from=${Src_Dir}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
 	rsync ${Rsync_Config[@]}
+	Func-Send-Email
 	Func-Unmount
 }
 # END FUNCTION RSYNC ------------------------------------------------
-
 
 # FUNCTION MOUNT ----------------------------------------------------
 Func-Mount() {
@@ -246,9 +260,10 @@ Func-Mount() {
 		
 		if [ -n "${St_Mnt_Unm}" ] && [ "${St_Mnt_Unm}" -eq "1" ]; then
 			echo "" >> ${Src_Dir}/LOG-BKP.txt
-			echo "${Msg_Mount1}" >> ${Src_Dir}/LOG-BKP.txt
-			echo "${Msg_Mount2}" >> ${Src_Dir}/LOG-BKP.txt
-			echo "${Msg_Mount3}" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Mount}" >> ${Src_Dir}/LOG-BKP.txt
+			echo "" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt
+			echo "${Msg_Alert3}" >> ${Src_Dir}/LOG-BKP.txt
 			Func-Send-Email
 			exit 1
 		else
@@ -258,7 +273,6 @@ Func-Mount() {
 			#Disk_Mount="${Disk_Mount}1"
 			#mkdir "/mnt/disks/${LABEL}"
 			/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${DEVICE}"
-			sleep 5
 			Func-Mount
 		fi
 		
@@ -266,18 +280,14 @@ Func-Mount() {
 }
 # END FUNCTION MOUNT ------------------------------------------------
 
-
 # FUNCTION UNMOUNT --------------------------------------------------
 Func-Unmount() {
 	# Check if drive unmounted
 	if [ -d ${MOUNTPOINT} ]; then
-		Func-Send-Email
 		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
-		sleep 5
 	fi
 }
 # END FUNCTION UNMOUNT ----------------------------------------------
-
 
 # FUNCTION SEND E-MAIL ----------------------------------------------
 Func-Send-Email() {
@@ -285,12 +295,20 @@ Func-Send-Email() {
 }
 # END FUNCTION SEND E-MAIL ------------------------------------------
 
+# FUNCTION ERROR ----------------------------------------------------
+Func-Error() {	
+	echo "${Msg_Error}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Alert2}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "${Msg_Alert3}" >> ${Src_Dir}/LOG-BKP.txt
+}
+# END FUNCTION ERROR ------------------------------------------------
 
 # FUNCTION LOG ------------------------------------------------------
 Func-Log() {
-	echo "From: ${Msg_Mail_Header}" > ${Src_Dir}/LOG-BKP.txt
+	echo "From: ${Send_Email}" > ${Src_Dir}/LOG-BKP.txt
 	echo "To: ${Send_Email}" >> ${Src_Dir}/LOG-BKP.txt
-	echo "Subject: ${Msg_Device}: ${LABEL}" >> ${Src_Dir}/LOG-BKP.txt
+	echo "Subject: ${Msg_Mail_Subject}" >> ${Src_Dir}/LOG-BKP.txt
 	
 	# Today date YYYY-MM-DD
 	Today_Date=$(date +%Y-%m-%d)
@@ -299,22 +317,28 @@ Func-Log() {
 }
 # END FUNCTION LOG --------------------------------------------------
 
-
 # MAIN --------------------------------------------------------------
 Func-Log
+
 if [ -n "${DEVICE}" ]; then
+	
 	case "${ACTION}" in
-		'ADD')
+	'ADD')
+		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
 			Func-Incr-Sync
-		;;
+		else
+			Func-Error
+			Func-Send-Email
+			Func-Unmount
+		fi
+	;;
 	esac
-elif [ -n "${LABEL}" ] && [ -n "${SERIAL}" ] && [ -n "${PARTITION}" ]; then
+	
+elif [ -n "${LABEL}" ] && [ -n "${SERIAL}" ] && [ -n "${PARTITION}" ] && [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ] && [ -n "${Src_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ]; then
 	Func-Incr-Sync
 else
-	echo "" >> ${Src_Dir}/LOG-BKP.txt
-	echo "${Msg_Error1}" >> ${Src_Dir}/LOG-BKP.txt
-	echo "${Msg_Error2}" >> ${Src_Dir}/LOG-BKP.txt
+	Func-Error
 	Func-Send-Email
-	exit 1
+	Func-Unmount
 fi
 # END MAIN ----------------------------------------------------------
