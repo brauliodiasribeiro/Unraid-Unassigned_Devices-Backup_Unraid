@@ -7,7 +7,7 @@
 	When the backup start, you'll be notified by the email. When it finishes, too.
 
 # INCREMENTAL BACKUP
-	Don't delete anything from the backup Src_Flashectory, just copy new or modified files.
+	Don't delete anything from the backup directory, just copy new or modified files.
 
 	Plug & Play: 	Just plug the device into USB.
 	
@@ -15,7 +15,8 @@
  			Let's schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
 
 # SYNC BACKUP
-	Mirroring. If the file isn't in the source Src_Flashectory, it'll be deleted from the backup Src_Flashectory.
+	Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
+	it'll be deleted from the backup Src_Flashectory.
 
 	Plug & Play:	How often to backup is defined in the script (Day_Sync).
 			Example: make sync backup every 30 days from the last backup.
