@@ -13,6 +13,7 @@
 	
  	Fixed:		They are already connected but not is mounted.
  			Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
+			Example: "Schedule Daily" or "Schedule Weekly".
 
 # SYNC BACKUP
 	Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
