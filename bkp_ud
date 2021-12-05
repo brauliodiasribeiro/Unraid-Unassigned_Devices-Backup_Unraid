@@ -1,3 +1,4 @@
+# Use this script on devices "Unassigned Devices"
 #!/bin/bash
 #PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 arrayStarted=true
