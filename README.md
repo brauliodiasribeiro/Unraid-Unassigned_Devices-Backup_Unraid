@@ -8,7 +8,7 @@
 
 # INCREMENTAL BACKUP
 	Don't delete anything from the backup directory, just copy new or modified files.
-
+	
 	Plug & Play: 	Just plug the device into USB.
 	
  	Fixed:		They are already connected but not is mounted.
@@ -16,8 +16,7 @@
 
 # SYNC BACKUP
 	Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
-	it'll be deleted from the backup Src_Flashectory.
-
+	
 	Plug & Play:	How often to backup is defined in the script (Day_Sync).
 			Example: make sync backup every 30 days from the last backup.
 	
