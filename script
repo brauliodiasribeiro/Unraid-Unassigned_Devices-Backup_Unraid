@@ -122,7 +122,7 @@ St_On_Off=0
 Script_Name="bkp_ud"
  		# Script name. It'll be create in "CA user scripts" and in the folder "Script_Dir". Type between "" without / begin and end
 
-Script_Dir="/mnt/user/Braulio Technology/SCRIPT/SHELL"
+Script_Dir="/mnt/user/Braulio-Technology/Unassigned_Devices_Backup"
 		# Path to backup all files this device. Type between "" without / begin and end
 
 Day_Sync=90
@@ -141,30 +141,6 @@ Send_Email="test@gmail.com"
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
 
-# ***** LANGUAGE: PORTUGUESE ****
-Msg_Mail_Subject="Backup: ${LABEL}"
-Msg_Device="Dispositivo"
-Msg_Date="Data"
-
-Msg_Bkp_Type_Incr="Tipo = Incremental"
-Msg_Bkp_Type_Sync="Tipo = Sincronizado"
-
-Msg_Bkp_Start="Status: Backup inicializado. Você receberá um e-mail quando terminar"
-
-Msg_Bkp_Finish_On="Status: Backup efetuado com sucesso"
-Msg_Bkp_Finish_Off="Status: Backup executado em modo teste. Nenhum arquivo foi modificado (copiado ou deletado)"
-
-Msg_Mount="Status: Erro ao iniciar backup. O dispositivo não foi montado"
-Msg_Unmount="Status: Erro ao finalizar backup. O dispositivo não foi desmontado"
-
-Msg_Error="Status: Backup não configurado para este dispositivo"
-
-Msg_Alert1="NÃO DESCONECTE o dispositivo da USB (se estiver conectado)"
-Msg_Alert2="Desconecte o dispositivo da USB (se estiver conectado)"
-Msg_Alert3="Entre em contato com a equipe de TI"
-# ***** END LANGUAGE: PORTUGUESE *****
-
-# ***** LANGUAGE: ENGLISH *****
 #Msg_Mail_Subject="Backup: ${LABEL}"
 #Msg_Device="Device"
 #Msg_Date="Date"
@@ -185,7 +161,6 @@ Msg_Alert3="Entre em contato com a equipe de TI"
 #Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
 #Msg_Alert2="Disconnect the device from the USB (if connected)"
 #Msg_Alert3="Contact the IT team"
-# ***** END LANGUAGE: ENGLISH *****
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
