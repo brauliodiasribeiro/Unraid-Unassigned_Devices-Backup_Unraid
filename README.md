@@ -12,7 +12,7 @@
 	Plug & Play: 	Just plug the device into USB.
 	
  	Fixed:		They are already connected but not is mounted.
- 			Let's schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
+ 			Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
 
 # SYNC BACKUP
 	Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
