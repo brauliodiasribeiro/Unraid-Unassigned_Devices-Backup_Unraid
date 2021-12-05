@@ -30,7 +30,7 @@ arrayStarted=true
 # INCREMENTAL BACKUP
 # Don't delete anything from the backup directory (Script_Dir), just copy new or modified files.
 # 		Plug & Play: 	Just plug the device into USB.
-# 		Fixed:		They are already connected but not is mounted.
+# 		Fixed:		They are already connected but not mounted.
 # 			 	Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
 #			   	Example: "Schedule Daily" or "Schedule Weekly".
 #
@@ -49,7 +49,7 @@ arrayStarted=true
 # The script uses the partition name (LABEL) to make backup. Don't use the same names even if they are different devices.
 # Three files are created in each device's folder.
 #		- (LOG-LAST-SYNC-BKP.txt)saves the date of the last synchronized backup.
-#		- (LOG-BKP.txt) contains the information that will be sent to the e-mail (Send_Email).
+#		- (LOG-BKP.txt) contains the information that will be sent to the email (Send_Email).
 #		- (PATHS.txt) to enter all the paths you want to backup.
 #
 # END HOW DOES IT WORK? ---------------------------------------------
@@ -66,23 +66,23 @@ arrayStarted=true
 # CREATE SCRIPT "CA USER SCRIPTS" AND FILES FOR EACH BACKUP DEVICE ---------
 # Run the script on the device the first time to create the files.
 # A script (Script_Name) is created in "CA User Scripts". Your function is:
-# 		- Store files from all device in one location.
+# 		- Store files from all devices in one location.
 #		- Sync device files between "CA User Scripts" and our backup folder. A copy of these files is forwarded to (Script_Dir).
 #		- Mount fixed devices (those that are connected but unmounted. Example: internal devices for backup).
 #
-# Each device will have a folder inside script folder (Script_Name) created in "CA User Scripts".
+# Each device will have a folder inside the script folder (Script_Name) created in "CA User Scripts".
 # The folder name of each device is the SERIAL that appears on unassigned devices.
 #		- Example: (ST1000LM024_HN-M101MBB_S2RUJ9BD409470) (ST2000DM001-1CH164_Z1E450FD).
-#		- The changes "PATH.txt" file must be made in the backup folder (Script_Dir), because our script sync with "CA User Scripts" folder.
+#		- The changes to the "PATH.txt" file must be made in the backup folder (Script_Dir), because the script syncs with the "CA User Scripts" folder.
 #
 # END CREATE SCRIPT "CA USER SCRIPTS" AND FILES FOR EACH BACKUP DEVICE -----
 
 
 # HOW "PATHS.txt" WORKS? --------------------------------------------
 # Open each "PATHS.txt" file in (Script_Dir) and type all the paths you want to backup.
-# Type a path per line and add "/***" in the end of each line. The "***" is to copy all subfolders of this Src_Flashectory.
-# 		If you're copying just the subSrc_Flashectory, you'll need to enter the parent Src_Flashectory first without "***".
-# 		The default folder (source) to copy the files is "/mnt/user/". This's where you create UNRAID shares. So you just need to type the rest of the way.
+# Type a path per line and add "/***" at the end of each line. The "***" is to copy all subfolders of this directory.
+# 		If you're copying just the sub directory, you'll need to enter the parent directory first without "***".
+# 		The default folder (source) to copy the files is "/mnt/user/". This is where you create UNRAID shares. So you just need to type the rest of the way.
 #
 #		Example "Default Source"
 #			/mnt/user/Photo
@@ -91,12 +91,12 @@ arrayStarted=true
 #			/mnt/user/Video/Action
 #			/mnt/user/Video/Comedy
 #
-#		Example "PATHS.txt" copying the full Src_Flashectory
+#		Example "PATHS.txt" copying the full directory
 #			Photo/***
 #			Music/***
 #			Video/***
 #
-#		Example "PATHS.txt" copying just the subSrc_Flashectory
+#		Example "PATHS.txt" copying just the sub directory
 #			Photo/***
 #			Music/***
 #			Video/
@@ -107,7 +107,7 @@ arrayStarted=true
 # 			Don't type the path between slashes.  Right: Video/Comedy/***  Wrong: /Video/Comedy/***  Wrong: Video/Comedy/***/  Wrong: /Video/Comedy/***/
 #
 #
-# Run the script on the device again to sync all files and starting backup.
+# Run the script on the device again to sync all files and start the backup.
 #
 # END HOW "PATHS.txt" WORKS? ----------------------------------------
 
@@ -122,10 +122,10 @@ St_On_Off=0
  		# TURN THE SCRIPT ON OR OFF. 0 disable backup, 1 enable backup. If set "0" nothing will be modified (copied or deleted)!
 
 Script_Name="bkp_ud"
- 		# Script name. It'll be create in "CA user scripts" and in the folder "Script_Dir". Type between "" without / begin and end
+ 		# Script name. It'll be created in "CA user scripts" and in the folder "Script_Dir". Type between "" without / begin and end
 
 Script_Dir="/mnt/user/Braulio-Technology/Unassigned_Devices_Backup"
-		# Path to backup all files this device. Type between "" without / begin and end
+		# Path to backup all files on this device. Type between "" without / begin and end
 
 Day_Sync=90
 		# PLUG & PLAY DEVICE
@@ -156,7 +156,7 @@ Send_Email="test@gmail.com"
 #Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
 
 #Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
-#Msg_Unmount="Statuss: Error finishing backup. The device hasn't been unmounted"
+#Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
 
 #Msg_Error="Status: Backup not configured for this device"
 
@@ -269,11 +269,11 @@ Func-Unmount() {
 }
 # END FUNCTION UNMOUNT ----------------------------------------------
 
-# FUNCTION SEND E-MAIL ----------------------------------------------
+# FUNCTION SEND EMAIL ----------------------------------------------
 Func-Send-Email() {
 	sendmail ${Send_Email} < ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
 }
-# END FUNCTION SEND E-MAIL ------------------------------------------
+# END FUNCTION SEND EMAIL ------------------------------------------
 
 # FUNCTION ERROR ----------------------------------------------------
 Func-Error() {	
