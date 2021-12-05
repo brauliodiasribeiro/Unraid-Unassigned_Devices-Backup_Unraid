@@ -18,6 +18,8 @@ Don't delete anything from the backup Src_Flashectory, just copy new or modified
 # SYNC BACKUP
 Mirroring. If the file isn't in the source Src_Flashectory, it'll be deleted from the backup Src_Flashectory.
 
-	Plug & Play:	How often to backup is defined in the script (Day_Sync). Example: make sync backup every 30 days from the last backup.
+	Plug & Play:	How often to backup is defined in the script (Day_Sync).
+			Example: make sync backup every 30 days from the last backup.
 	
-	Fixed:		How often to backup is defined in the script (Day_Sync). Example: make sync backup every 30 days from the last backup.
+	Fixed:		How often to backup is defined in the script (Day_Sync).
+			Example: make sync backup every 30 days from the last backup.
