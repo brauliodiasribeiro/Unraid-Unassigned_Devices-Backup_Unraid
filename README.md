@@ -23,3 +23,7 @@
 	
 	Fixed:		How often to backup is defined in the script.
 			Example: sync backup every 30 days from the last backup.
+			
+# INSTRUCTIONS
+	bkp_ud = use in "CA User Scripts"
+	unassigned-devices = use on devices "Unassigned Devices"
