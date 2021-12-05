@@ -111,10 +111,8 @@ arrayStarted=true
 
 
 
-
-
 #####################################################################
-#				   	  CONFIGURATION VARIABLES						#
+#			CONFIGURATION VARIABLES			    #
 #####################################################################
 
 # CHANGE THIS VARIABLES ---------------------------------------------
@@ -191,16 +189,14 @@ Msg_Alert3="Entre em contato com a equipe de TI"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
-#					 END CONFIGURATION VARIABLES					#
+#	  	     END CONFIGURATION VARIABLES		    #
 #####################################################################
 
 
 
-
-
 #####################################################################
-#					HERE THE PROGRAMMING BEGINS						#
-#					   DON'T CHANGE ANYTHING						#
+#		      HERE THE PROGRAMMING BEGINS		    #
+#		         DON'T CHANGE ANYTHING			    #
 #####################################################################
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
