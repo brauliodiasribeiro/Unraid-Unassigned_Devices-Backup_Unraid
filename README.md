@@ -12,7 +12,6 @@
 	Plug & Play: 	Just plug the device into USB.
 	
  	Fixed:		They are already connected but not is mounted.
-	
  			Let's schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
 
 # SYNC BACKUP
