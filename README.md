@@ -25,5 +25,14 @@
 			Example: sync backup every 30 days from the last backup.
 			
 # INSTRUCTIONS
-	bkp_ud = use in "CA User Scripts"
-	unassigned-devices = use on devices "Unassigned Devices"
+	Configure the variables in "script".
+
+	* Run the "script" on each device for the first time.
+
+	- A script will be created in "CA User Scripts / Script_Name".
+
+	- The folder and all device files will be created in "CA User Scripts / Script_Name / Device Serial" and a copy in "Script_Dir / Script_Name / Device Serial".
+
+	- Add the path of the folders you want to backup in "Script_Dir / Device Serial / PATHS.txt".
+
+	- Run the "script" on each device again.	
