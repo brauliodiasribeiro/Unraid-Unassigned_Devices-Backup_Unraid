@@ -25,9 +25,9 @@
 			Example: sync backup every 30 days from the last backup.
 			
 # INSTRUCTIONS
-	Configure the variables in "script".
+	- Configure the variables in "script".
 
-	* Run the "script" on each device for the first time.
+	- Run the "script" on each device for the first time.
 
 	- A script will be created in "CA User Scripts / Script_Name".
 
@@ -35,4 +35,4 @@
 
 	- Add the path of the folders you want to backup in "Script_Dir / Device Serial / PATHS.txt".
 
-	- Run the "script" on each device again.	
+	- Run the "script" on each device again.
