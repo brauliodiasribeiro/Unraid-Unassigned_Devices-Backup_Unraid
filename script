@@ -1,9 +1,8 @@
-# Use this script in "CA User Scripts"
 #!/bin/bash
 #PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 arrayStarted=true
 
-# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES PLUGIN ----
+# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES -----------
 # LINK: https://github.com/bdrtec/Unraid-Backup-Unassigned-Devices
 # AUTHOR: BRAULIO DIAS RIBEIRO
 # -------------------------------------------------------------------
@@ -31,16 +30,16 @@ arrayStarted=true
 # INCREMENTAL BACKUP
 # Don't delete anything from the backup directory (Script_Dir), just copy new or modified files.
 # 		Plug & Play: 	Just plug the device into USB.
-# 		Fixed:		They are already connected but not mounted.
-# 			 	Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
-#			   	Example: "Schedule Daily" or "Schedule Weekly".
+# 		Fixed:			They are already connected but not mounted.
+# 			 	  		Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
+#			   			Example: "Schedule Daily" or "Schedule Weekly".
 #
 # SYNC BACKUP
 # Mirroring. If the file isn't in the source directory (Src_Flash), it'll be deleted from the backup directory (Script_Dir).
 # 		Plug & Play:	How often to backup is defined in the script (Day_Sync).
-#				Example: sync backup every 30 days from the last backup.
-# 		Fixed:		How often to backup is defined in the script (Day_Sync).
-#				Example: sync backup every 30 days from the last backup.
+#						Example: sync backup every 30 days from the last backup.
+# 		Fixed:			How often to backup is defined in the script (Day_Sync).
+#						Example: sync backup every 30 days from the last backup.
 #
 # END TYPE OF BACKUP ------------------------------------------------
 
@@ -48,38 +47,43 @@ arrayStarted=true
 # HOW DOES IT WORK? -------------------------------------------------
 # Let's use "CA User Scripts" to control all backup devices.
 # The script uses the partition name (LABEL) to make backup. Don't use the same names even if they are different devices.
-# Three files are created in each device's folder.
+# Four files are created in each device's folder.
 #		- (LOG-LAST-SYNC-BKP.txt)saves the date of the last synchronized backup.
 #		- (LOG-BKP.txt) contains the information that will be sent to the email (Send_Email).
 #		- (PATHS.txt) to enter all the paths you want to backup.
+#		- (SCRIPT.txt) a copy of the script.
 #
 # END HOW DOES IT WORK? ---------------------------------------------
 
 
-# STARTING CONFIGURATION --------------------------------------------
+# STARTING THE CONFIGURATION ----------------------------------------
+#
 # Configure the variables in the script.
 #
-# Attention: the example files are attached
+# Attention: the example files are attached.
 #
-# END STARTING CONFIGURATION ----------------------------------------
+# END STARTING THE CONFIGURATION ------------------------------------
 
 
 # CREATE SCRIPT "CA USER SCRIPTS" AND FILES FOR EACH BACKUP DEVICE ---------
 # Run the script on the device the first time to create the files.
 # A script (Script_Name) is created in "CA User Scripts". Your function is:
 # 		- Store files from all devices in one location.
-#		- Sync device files between "CA User Scripts" and our backup folder. A copy of these files is forwarded to (Script_Dir).
-#		- Mount fixed devices (those that are connected but unmounted. Example: internal devices for backup).
+#		- Sync device files between "CA User Scripts" and our backup folder (a copy of these files is forwarded to (Script_Dir)).
+#		- Mount fixed devices (those that are connected but unmounted). Example: internally connected devices for backup.
+#				After creating this script, set the variables in "CA User Scripts -> Script_Name") to mount the fixed devices.
 #
 # Each device will have a folder inside the script folder (Script_Name) created in "CA User Scripts".
+# This folder is created automatically when running the script on the device for the first time.
 # The folder name of each device is the SERIAL that appears on unassigned devices.
 #		- Example: (ST1000LM024_HN-M101MBB_S2RUJ9BD409470) (ST2000DM001-1CH164_Z1E450FD).
-#		- The changes to the "PATH.txt" file must be made in the backup folder (Script_Dir), because the script syncs with the "CA User Scripts" folder.
+#		- The changes to the "PATH.txt" file must be made in the backup folder (Script_Dir), because the script syncs with the "CA User Scripts" folder when it runs.
+#		- The other three files are only backup. If modified, they will not be copied to "CA Script Users".
 #
 # END CREATE SCRIPT "CA USER SCRIPTS" AND FILES FOR EACH BACKUP DEVICE -----
 
 
-# HOW "PATHS.txt" WORKS? --------------------------------------------
+# UNDERSTANDING "PATHS.txt" FILE ------------------------------------
 # Open each "PATHS.txt" file in (Script_Dir) and type all the paths you want to backup.
 # Type a path per line and add "/***" at the end of each line. The "***" is to copy all subfolders of this directory.
 # 		If you're copying just the sub directory, you'll need to enter the parent directory first without "***".
@@ -110,12 +114,22 @@ arrayStarted=true
 #
 # Run the script on the device again to sync all files and start the backup.
 #
-# END HOW "PATHS.txt" WORKS? ----------------------------------------
+# END UNDERSTANDING "PATHS.txt" FILE --------------------------------
+
+# FINISHING THE CONFIGURATION ---------------------------------------
+#
+# Run the script on the device again to sync all files and start the backup.
+#
+# Attention: the example files are attached.
+#
+# END FINISHING THE CONFIGURATION -----------------------------------
+
+
 
 
 
 #####################################################################
-#			CONFIGURATION VARIABLES			    #
+#		         CONFIGURATION VARIABLES		    #
 #####################################################################
 
 # CHANGE THIS VARIABLES ---------------------------------------------
@@ -143,38 +157,37 @@ Send_Email="test@gmail.com"
 
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
+Msg_Mail_Subject="Backup: ${LABEL}"
+Msg_Device="Device"
+Msg_Date="Date"
 
-#Msg_Mail_Subject="Backup: ${LABEL}"
-#Msg_Device="Device"
-#Msg_Date="Date"
+Msg_Bkp_Type_Incr="Type = Incremental"
+Msg_Bkp_Type_Sync="Type = Synchronized"
 
-#Msg_Bkp_Type_Incr="Type = Incremental"
-#Msg_Bkp_Type_Sync="Type = Synchronized"
+Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
 
-#Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
+Msg_Bkp_Finish_On="Status: Backup performed successfully"
+Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
 
-#Msg_Bkp_Finish_On="Status: Backup performed successfully"
-#Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
+Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
+Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
 
-#Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
-#Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
+Msg_Error="Status: Backup not configured for this device"
 
-#Msg_Error="Status: Backup not configured for this device"
-
-#Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
-#Msg_Alert2="Disconnect the device from the USB (if connected)"
-#Msg_Alert3="Contact the IT team"
+Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
+Msg_Alert2="Disconnect the device from the USB (if connected)"
+Msg_Alert3="Contact the IT team"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
-#	  	     END CONFIGURATION VARIABLES		    #
+#		       END CONFIGURATION VARIABLES		    #
 #####################################################################
 
 
 
 #####################################################################
-#		      HERE THE PROGRAMMING BEGINS		    #
-#		         DON'T CHANGE ANYTHING			    #
+#		     HERE THE PROGRAMMING BEGINS		    #
+#	  	        DON'T CHANGE ANYTHING    		    #
 #####################################################################
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
@@ -317,12 +330,17 @@ Func-Create-Script() {
 		touch "${Src_Flash}/${Script_Name}/description"
 		touch "${Src_Flash}/${Script_Name}/name"
 		touch "${Src_Flash}/${Script_Name}/script"
+		echo "${Script_Name}" > "${Src_Flash}/${Script_Name}/name"
+		Func-Bkp-Ud
 	fi
+	
 	
 	if [ ! -d "${Src_Flash}/${Script_Name}/${SERIAL}" ]; then
 		mkdir "${Src_Flash}/${Script_Name}/${SERIAL}"
+	fi
+	
+	if [ ! -f "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" ]; then
 		touch "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt"
-		cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"
 	fi
 }
 # END FUNCTION CREATE SCRIPT ----------------------------------------
@@ -330,18 +348,69 @@ Func-Create-Script() {
 # FUNCTION SYNC SCRIPT ----------------------------------------------
 Func-Sync-Script() {
 	if [ -d "${Src_Flash}/${Script_Name}/${SERIAL}" ]; then
-		# Copy all files from "CA User Scripts" to "Script_Dir", except "PATHS.txt"
-		rsync -avih --stats --delete --exclude="PATHS.txt" "${Src_Flash}/${Script_Name}/${SERIAL}/" "${Script_Dir}/${Script_Name}/${SERIAL}"
+		# Copy "LOG-BKP.txt" and "LOG-LAST-SYNC-BKP.txt" file from "CA User Scripts" to "Script_Dir"
+		cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"
+		cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"
 		
 		# Copy "PATHS.txt" file from "Script_Dir" to "CA User Scripts"
-		rsync -avih --stats --delete  --include=*/ --include="PATHS.txt" --exclude=* "${Script_Dir}/${Script_Name}/${SERIAL}/" "${Src_Flash}/${Script_Name}/${SERIAL}"
+		if [ -f "${Script_Dir}/${Script_Name}/${SERIAL}/PATHS.txt" ]; then
+			cp -R "${Script_Dir}/${Script_Name}/${SERIAL}/PATHS.txt" "${Src_Flash}/${Script_Name}/${SERIAL}/"
+		else
+			cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"			
+		fi
+		
+		if [ -f "/boot/config/plugins/unassigned.devices/${LABEL}.sh" ]; then
+			cp -R "/boot/config/plugins/unassigned.devices/${LABEL}.sh" "${Script_Dir}/${Script_Name}/${SERIAL}/SCRIPT.txt"
+		fi
+		
+		# Change folder permission
+		chown -R root:users "${Script_Dir}/${Script_Name}/${SERIAL}/"
+		chmod -R 660 "${Script_Dir}/${Script_Name}/${SERIAL}/"
 	fi
-	
-	# Change folder permission
-	chown -R root:users "${Script_Dir}/${Script_Name}/"
-	chmod -R 660 "${Script_Dir}/${Script_Name}/"
 }
 # END FUNCTION SYNC SCRIPT ------------------------------------------
+
+# FUNCTION CREATE BKP_UD --------------------------------------------
+Func-Bkp-Ud() {
+cat << EOF > "${Src_Flash}/${Script_Name}/script"
+#!/bin/bash
+#PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+arrayStarted=true
+
+# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES -----------
+# LINK: https://github.com/bdrtec/Unraid-Backup-Unassigned-Devices
+# AUTHOR: BRAULIO DIAS RIBEIRO
+# -------------------------------------------------------------------
+
+# Turn on or off mount
+St_Mount=0
+
+
+# Fixed device to mount and backup ----------------------------
+Fixed_Device=(
+	# "fdisk -l" in Unraid terminal to view all devices
+	"sde"
+	"sdf"
+)
+# End Device fixed to mount and backup ------------------------
+
+
+# Check if mount is turn on or off ----------------------------
+if [ -n "${St_Mount}" ] && [ "${St_Mount}" -eq "1" ]; then
+	i=0
+	while [ $i -lt ${#Fixed_Device[@]} ]
+	do
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "/dev/${Fixed_Device[$i]}1"
+		let i++
+	done
+	echo "Mount successful!"
+elif [ -z "${St_Mount}" ] || ([ "${St_Mount}" -ne "0" ] && [ "${St_Mount}" -ne "1" ]); then
+	echo "Script not configured correctly! (set 0 or 1 in St_Mount)"
+fi
+# End Check if mount is turn on or off ------------------------
+EOF
+}
+# END FUNCTION CREATE BKP_UD ----------------------------------------
 
 # MAIN --------------------------------------------------------------
 # Check if all variables are filled correctly
