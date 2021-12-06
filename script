@@ -16,16 +16,6 @@ arrayStarted=true
 # END DESCRIPTION----------------------------------------------------
 
 
-# INSTALL -----------------------------------------------------------
-# You need install "Unassigned Devices" and "Unassigned Devices Plus (UD+)" plugins
-#		https://forums.unraid.net/topic/92462-unassigned-devices-managing-disk-drives-and-remote-shares-outside-of-the-unraid-array/
-#
-# You need install "CA User Scripts" plugin
-#		https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/
-#
-# END INSTALL -------------------------------------------------------
-
-
 # TYPE OF BACKUP ----------------------------------------------------
 # INCREMENTAL BACKUP
 # Don't delete anything from the backup directory (Script_Dir), just copy new or modified files.
@@ -42,6 +32,33 @@ arrayStarted=true
 #						Example: sync backup every 30 days from the last backup.
 #
 # END TYPE OF BACKUP ------------------------------------------------
+
+
+# INSTALL -----------------------------------------------------------
+# You need install "Unassigned Devices" and "Unassigned Devices Plus (UD+)" plugins
+#		https://forums.unraid.net/topic/92462-unassigned-devices-managing-disk-drives-and-remote-shares-outside-of-the-unraid-array/
+#
+# You need install "CA User Scripts" plugin
+#		https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/
+#
+# END INSTALL -------------------------------------------------------
+
+
+# SUMMARY -----------------------------------------------------------
+#
+# Configure the variables in "CONFIGURATION VARIABLES".
+#
+# Run the script on each device for the first time.
+#
+# A script will be created in "CA User Scripts / Script_Name".
+#
+# The folder and all device files will be created in "CA User Scripts / Script_Name / Device Serial" and a copy in "Script_Dir / Script_Name / Device Serial".
+#
+# Add the path of the folders you want to backup in "Script_Dir / Device Serial / PATHS.txt".
+#
+# Run the script on each device again.
+#
+# END SUMMARY -------------------------------------------------------
 
 
 # HOW DOES IT WORK? -------------------------------------------------
@@ -126,8 +143,10 @@ arrayStarted=true
 
 
 
+
+
 #####################################################################
-#		         CONFIGURATION VARIABLES		    #
+#				   	  CONFIGURATION VARIABLES						#
 #####################################################################
 
 # CHANGE THIS VARIABLES ---------------------------------------------
@@ -155,37 +174,65 @@ Send_Email="test@gmail.com"
 
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
+
+# ***** LANGUAGE: PORTUGUESE ****
 Msg_Mail_Subject="Backup: ${LABEL}"
-Msg_Device="Device"
-Msg_Date="Date"
+Msg_Device="Dispositivo"
+Msg_Date="Data"
 
-Msg_Bkp_Type_Incr="Type = Incremental"
-Msg_Bkp_Type_Sync="Type = Synchronized"
+Msg_Bkp_Type_Incr="Tipo = Incremental"
+Msg_Bkp_Type_Sync="Tipo = Sincronizado"
 
-Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
+Msg_Bkp_Start="Status: Backup inicializado. Você receberá um e-mail quando terminar"
 
-Msg_Bkp_Finish_On="Status: Backup performed successfully"
-Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
+Msg_Bkp_Finish_On="Status: Backup efetuado com sucesso"
+Msg_Bkp_Finish_Off="Status: Backup executado em modo teste. Nenhum arquivo foi modificado (copiado ou deletado)"
 
-Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
-Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
+Msg_Mount="Status: Erro ao iniciar backup. O dispositivo não foi montado"
+Msg_Unmount="Status: Erro ao finalizar backup. O dispositivo não foi desmontado"
 
-Msg_Error="Status: Backup not configured for this device"
+Msg_Error="Status: Backup não configurado para este dispositivo"
 
-Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
-Msg_Alert2="Disconnect the device from the USB (if connected)"
-Msg_Alert3="Contact the IT team"
+Msg_Alert1="NÃO DESCONECTE o dispositivo da USB (se estiver conectado)"
+Msg_Alert2="Desconecte o dispositivo da USB (se estiver conectado)"
+Msg_Alert3="Entre em contato com a equipe de TI"
+# ***** END LANGUAGE: PORTUGUESE *****
+
+# ***** LANGUAGE: ENGLISH *****
+#Msg_Mail_Subject="Backup: ${LABEL}"
+#Msg_Device="Device"
+#Msg_Date="Date"
+
+#Msg_Bkp_Type_Incr="Type = Incremental"
+#Msg_Bkp_Type_Sync="Type = Synchronized"
+
+#Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
+
+#Msg_Bkp_Finish_On="Status: Backup performed successfully"
+#Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
+
+#Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
+#Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
+
+#Msg_Error="Status: Backup not configured for this device"
+
+#Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
+#Msg_Alert2="Disconnect the device from the USB (if connected)"
+#Msg_Alert3="Contact the IT team"
+# ***** END LANGUAGE: ENGLISH *****
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
-#		       END CONFIGURATION VARIABLES		    #
+#					 END CONFIGURATION VARIABLES					#
 #####################################################################
 
 
 
+
+
 #####################################################################
-#		     HERE THE PROGRAMMING BEGINS		    #
-#	  	        DON'T CHANGE ANYTHING    		    #
+#					HERE THE PROGRAMMING BEGINS						#
+#					   DON'T CHANGE ANYTHING						#
 #####################################################################
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
