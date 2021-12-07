@@ -405,7 +405,7 @@ if [ -n "${St_Mount}" ] && [ "${St_Mount}" -eq "1" ]; then
 	i=0
 	while [ $i -lt ${#Fixed_Device[@]} ]
 	do
-		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "/dev/${Fixed_Device[$i]}"
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${Fixed_Device[$i]}"
 		let i++
 	done
 	echo "Mount successful!"
