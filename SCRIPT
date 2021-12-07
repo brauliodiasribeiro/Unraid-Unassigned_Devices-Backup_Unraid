@@ -163,26 +163,26 @@ Send_Email1="test@gmail.com"
 
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
 # Translate to your preferred language (English, Portuguese, German, Russian, Italian, Spanish, etc)
-#Msg_Mail_Subject="Backup: ${LABEL}"
-#Msg_Device="Device"
-#Msg_Date="Date"
+Msg_Mail_Subject="Backup: ${LABEL}"
+Msg_Device="Device"
+Msg_Date="Date"
 
-#Msg_Bkp_Type_Incr="Type = Incremental"
-#Msg_Bkp_Type_Sync="Type = Synchronized"
+Msg_Bkp_Type_Incr="Type = Incremental"
+Msg_Bkp_Type_Sync="Type = Synchronized"
 
-#Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
+Msg_Bkp_Start="Status: Backup initialized. You'll receive an email when finish"
 
-#Msg_Bkp_Finish_On="Status: Backup performed successfully"
-#Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
+Msg_Bkp_Finish_On="Status: Backup performed successfully"
+Msg_Bkp_Finish_Off="Status: Backup performed in test mode. No files were modified (copied or deleted)"
 
-#Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
-#Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
+Msg_Mount="Status: Error starting backup. The device hasn't been mounted"
+Msg_Unmount="Status: Error finishing backup. The device hasn't been unmounted"
 
-#Msg_Error="Status: Backup not configured for this device"
+Msg_Error="Status: Backup not configured for this device"
 
-#Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
-#Msg_Alert2="Disconnect the device from the USB (if connected)"
-#Msg_Alert3="Contact the IT team"
+Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
+Msg_Alert2="Disconnect the device from the USB (if connected)"
+Msg_Alert3="Contact the IT team"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
