@@ -393,7 +393,7 @@ St_Mount=0
 
 # Fixed device to mount and backup ----------------------------
 Fixed_Device=(
-	# Fixed device name in "Unassigned devices" to mount and backup. Example: Dev 1, Dev2, Dev 3
+	# Fixed device name in "Unassigned devices" to mount and backup. Example: Dev 1, Dev 2, Dev 3
 	#"dev1"
 	#"dev3"
 )
