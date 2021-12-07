@@ -198,9 +198,9 @@ Msg_Alert3="Contact the IT team"
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
 Func-Incr-Sync() {
-	echo "${Msg_Bkp_Start}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "${Msg_Alert1}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+	echo "${Msg_Bkp_Start}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	echo "${Msg_Alert1}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 	Func-Send-Email
 	Func-Log
 	
@@ -213,7 +213,7 @@ Func-Incr-Sync() {
 		# Test if the script is enabled or in test mode
 		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
 			# Save the date of the last backup (today) in the YYYY-MM-DD format
-			echo "${Today_Date}" > ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt
+			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt"
 		fi
 		
 	fi
@@ -240,36 +240,36 @@ Func-Rsync() {
 		
 		# Test if the script is turned on or off
 		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
-			echo "${Today_Date}" > ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt
+			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt"
 		fi
 		
-		echo "${Msg_Bkp_Type_Sync}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+		echo "${Msg_Bkp_Type_Sync}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 		
 	else
-		echo "${Msg_Bkp_Type_Incr}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+		echo "${Msg_Bkp_Type_Incr}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 	fi
 	
 	if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ]; then
 		Rsync_Config+=("--dry-run")
-		echo "${Msg_Bkp_Finish_Off}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-		echo "" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-		echo "${Msg_Alert2}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+		echo "${Msg_Bkp_Finish_Off}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 	elif [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
-		echo "${Msg_Bkp_Finish_On}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-		echo "" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-		echo "${Msg_Alert2}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+		echo "${Msg_Bkp_Finish_On}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 	fi
 	
 	Rsync_Config+=("--include-from=${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
-	rsync ${Rsync_Config[@]}
+	rsync "${Rsync_Config[@]}"
 }
 # END FUNCTION RSYNC ------------------------------------------------
 
 # FUNCTION MOUNT ----------------------------------------------------
 Func-Mount() {
 	# Check if drive unmounted
-	if [ ! -d ${MOUNTPOINT} ]; then		
-		Func-Error ${Msg_Mount} ${Msg_Alert2} ${Msg_Alert3}
+	if [ ! -d "${MOUNTPOINT}" ]; then		
+		Func-Error "${Msg_Mount}" "${Msg_Alert2}" "${Msg_Alert3}"
 		Func-Send-Email
 		exit 1
 	fi
@@ -279,11 +279,11 @@ Func-Mount() {
 # FUNCTION UNMOUNT --------------------------------------------------
 Func-Unmount() {
 	# Check if drive mounted
-	if [ -d ${MOUNTPOINT} ]; then
+	if [ -d "${MOUNTPOINT}" ]; then
 		Func-Send-Email
 		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
 	else
-		Func-Error ${Msg_Unmount} ${Msg_Alert1} ${Msg_Alert3}
+		Func-Error "${Msg_Unmount}" "${Msg_Alert1}" "${Msg_Alert3}"
 		Func-Send-Email
 	fi
 }
@@ -291,30 +291,34 @@ Func-Unmount() {
 
 # FUNCTION SEND EMAIL ----------------------------------------------
 Func-Send-Email() {
-	sendmail ${Send_Email} < ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+	sendmail "${Send_Email}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
 }
 # END FUNCTION SEND EMAIL ------------------------------------------
 
 # FUNCTION ERROR ----------------------------------------------------
 Func-Error() {	
-	echo "" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "${1}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "${2}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "${3}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+cat << EOF > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+
+"${1}"
+
+"${2}"
+"${3}"
+EOF
 }
 # END FUNCTION ERROR ------------------------------------------------
 
 # FUNCTION LOG ------------------------------------------------------
 Func-Log() {
-	echo "From: ${Send_Email}" > ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "To: ${Send_Email}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "Subject: ${Msg_Mail_Subject}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	
-	# Today date YYYY-MM-DD
 	Today_Date=$(date +%Y-%m-%d)
-	echo "${Msg_Device} = ${LABEL}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
-	echo "${Msg_Date} = ${Today_Date}" >> ${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt
+	
+cat << EOF > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+From: "${Send_Email1}"
+To: "${Send_Email1}"
+Cco: "${Send_Email2}"
+Subject: "${Msg_Mail_Subject}"
+"${Msg_Device}" = "${LABEL}"
+"${Msg_Date}" = "${Today_Date}"
+EOF
 }
 # END FUNCTION LOG --------------------------------------------------
 
@@ -404,7 +408,7 @@ Fixed_Device=(
 # Check if mount is turn on or off ----------------------------
 if [ -n "${St_Mount}" ] && [ "${St_Mount}" -eq "1" ]; then
 	i=0
-	while [ $i -lt ${#Fixed_Device[@]} ]
+	while [ $i -lt "${#Fixed_Device[@]}" ]
 	do
 		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${Fixed_Device[$i]}"
 		let i++
