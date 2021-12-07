@@ -36,4 +36,4 @@
 
 	- Add the path of the folders you want to backup in "Script_Dir / Device Serial / PATHS.txt".
 
-	- Run the "script" on the device again to sync all files and start the backup.
+	- Run the "script" on each device again to sync all files and start the backup.
