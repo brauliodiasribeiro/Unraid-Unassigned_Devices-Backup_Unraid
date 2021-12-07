@@ -393,9 +393,9 @@ St_Mount=0
 
 # Fixed device to mount and backup ----------------------------
 Fixed_Device=(
-	# "fdisk -l" in Unraid terminal to view all devices
-	"sde"
-	"sdf"
+	# Fixed device name in "Unassigned devices" to mount and backup. Example: Dev 1, Dev2, Dev 3
+	#"dev1"
+	#"dev3"
 )
 # End Device fixed to mount and backup ------------------------
 
@@ -405,7 +405,7 @@ if [ -n "${St_Mount}" ] && [ "${St_Mount}" -eq "1" ]; then
 	i=0
 	while [ $i -lt ${#Fixed_Device[@]} ]
 	do
-		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "/dev/${Fixed_Device[$i]}1"
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "/dev/${Fixed_Device[$i]}"
 		let i++
 	done
 	echo "Mount successful!"
