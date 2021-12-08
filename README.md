@@ -1,5 +1,5 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?business=QVR5JEKFBASVW&no_recurring=0&currency_code=USD)
-# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES
+# INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES - by bdrtec
 	This script make incremental or sync backup to PLUG & PLAY devices or FIXED devices.
 
 	It's possible to schedule how often and what type of the backup will be done.
