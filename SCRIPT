@@ -427,12 +427,12 @@ EOF
 # END FUNCTION CREATE BKP_UD ----------------------------------------
 
 # MAIN --------------------------------------------------------------
-# Check if all variables are filled correctly
-if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && ([ -n "${Send_Email1}" ] || [ -n "${Send_Email2}" ]) && ([ -n "${St_On_Off}" ] && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]))); then
-	case "${ACTION}" in
-	'ADD')
+case "${ACTION}" in
+'ADD')	
+	# Check if all variables are filled correctly
+	if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && ([ -n "${Send_Email1}" ] || [ -n "${Send_Email2}" ]) && ([ -n "${St_On_Off}" ] && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]))); then	
 		Func-Create-Script
-		Func-Incr-Sync
+		Func-Sync-Script
 		Func-Log
 		
 		Func-Mount
@@ -440,13 +440,13 @@ if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ]
 		Func-Rsync
 		Func-Sync-Script
 		Func-Unmount
-	;;
-	esac
-else
-	/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}" -t
-	# Check if drive mounted
-	if [ -d "${MOUNTPOINT}" ]; then
-		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
+	else
+		/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}" -t
+		# Check if drive mounted
+		if [ -d "${MOUNTPOINT}" ]; then
+			/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
+		fi
 	fi
-fi
+;;
+esac
 # END MAIN ----------------------------------------------------------
