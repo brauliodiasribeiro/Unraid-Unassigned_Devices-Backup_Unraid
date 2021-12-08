@@ -291,7 +291,11 @@ Func-Unmount() {
 
 # FUNCTION SEND EMAIL ----------------------------------------------
 Func-Send-Email() {
-	sendmail "${Send_Email}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	if [ -n "${Send_Email1}" ]; then
+		sendmail "${Send_Email1}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	else
+		sendmail "${Send_Email2}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	fi
 }
 # END FUNCTION SEND EMAIL ------------------------------------------
 
@@ -440,5 +444,9 @@ if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ]
 	esac
 else
 	/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}\n${Msg_Alert3}" -t
+	# Check if drive mounted
+	if [ -d "${MOUNTPOINT}" ]; then
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
+	fi
 fi
 # END MAIN ----------------------------------------------------------
