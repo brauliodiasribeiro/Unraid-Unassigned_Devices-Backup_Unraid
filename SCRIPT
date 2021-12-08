@@ -443,7 +443,7 @@ if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ]
 	;;
 	esac
 else
-	/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}\n${Msg_Alert3}" -t
+	/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}" -t
 	# Check if drive mounted
 	if [ -d "${MOUNTPOINT}" ]; then
 		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
