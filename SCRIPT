@@ -156,8 +156,8 @@ Day_Sync=90
 		# Incremental backup: the frequency is scheduled in "CA User Scripts -> Schedule Disabled"
  		# Sync backup: 0 disable, x enable. "Day_Sync" is how often the script will sync (mirroring) backup
 
-Send_Email1="test@gmail.com"
-#Send_Email2="test@gmail.com"
+Send_Email1="test1@gmail.com"
+#Send_Email2="test2@gmail.com"
 		# Send email to. Type between ""
 # END CHANGE THIS VARIABLES -----------------------------------------
 
@@ -424,7 +424,7 @@ EOF
 
 # MAIN --------------------------------------------------------------
 # Check if all variables are filled correctly
-if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && [ -n "${Send_Email}" ] && [ -n "${St_On_Off}" ]) && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]); then
+if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && ([ -n "${Send_Email1}" ] || [ -n "${Send_Email2}" ]) && ([ -n "${St_On_Off}" ] && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]))); then
 	case "${ACTION}" in
 	'ADD')
 		Func-Create-Script
