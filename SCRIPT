@@ -3,7 +3,7 @@
 arrayStarted=true
 
 # INCREMENTAL OR SYNC BACKUP TO UNRAID UNASSIGNED DEVICES -----------
-# LINK: https://github.com/bdrtec/Unraid-Backup-Unassigned-Devices
+# LINK: https://github.com/bdrtec/Unraid-Bkp-UD-bdrtec
 # AUTHOR: BRAULIO DIAS RIBEIRO
 # -------------------------------------------------------------------
 
