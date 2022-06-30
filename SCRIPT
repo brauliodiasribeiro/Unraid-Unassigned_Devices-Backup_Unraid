@@ -48,8 +48,11 @@ arrayStarted=true
 # Configure the variables in "CONFIGURATION VARIABLES".
 # Run the script on each device for the first time.
 # A script will be created automatically in "CA User Scripts / Script_Name".
-# The folder and all device files will be created in "CA User Scripts / Script_Name / Device Serial" and a copy in "Script_Dir / Script_Name / Device Serial".
-# Add the path of the folders you want to backup in "Script_Dir / Script_Name / Device Serial / PATHS.txt".
+#		(Unraid -> Settings -> User Scripts -> Script_Name").
+# The folder and all device files will be created in "Src_Flash / Script_Name / Device Name"
+#		(Unraid -> Settings -> User Scripts -> Script_Name -> Device Name")
+# and a copy in "Script_Dir / Script_Name / Device Name".
+# Add the path of the folders you want to backup in "Script_Dir / Script_Name / Device Name / PATHS.txt".
 # Run the script on each device again to sync all files and start the backup.
 #
 # END SUMMARY -------------------------------------------------------
@@ -84,7 +87,7 @@ arrayStarted=true
 #
 # Each device will have a folder inside the script folder (Script_Name) created in "CA User Scripts".
 # This folder is created automatically when running the script on the device for the first time.
-# The folder name of each device is the SERIAL that appears on unassigned devices.
+# The folder name of each device is the (DEVICE NAME + LABEL) that appears on unassigned devices.
 #		- Example: (ST1000LM024_HN-M101MBB_S2RUJ9BD409470) (ST2000DM001-1CH164_Z1E450FD).
 #		- The changes to the "PATH.txt" file must be made in the backup folder (Script_Dir), because the script syncs with the "CA User Scripts" folder when it runs.
 #		- The other three files are only backup. If modified, they will not be copied to "CA User Scripts".
@@ -198,22 +201,22 @@ Msg_Alert3="Contact the IT team"
 
 # INCREMENTAL AND SYNC BACKUP ---------------------------------------
 Func-Incr-Sync() {
-	echo "${Msg_Bkp_Start}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-	echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-	echo "${Msg_Alert1}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+	echo "${Msg_Bkp_Start}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+	echo "" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+	echo "${Msg_Alert1}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	Func-Send-Email
 	Func-Log
 	
 	# Read the file with the date of the last backup in the YYYY-MM-DD format
-	Log_Last_Sync_Bkp=$(sed '$q' "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt")
+	Log_Last_Sync_Bkp=$(sed '$q' "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-LAST-SYNC-BKP.txt")
 	
 	# Test if the file exists or is empty
-	if [ ! -f "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt" ] || [ -z "${Log_Last_Sync_Bkp}" ]; then
+	if [ ! -f "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-LAST-SYNC-BKP.txt" ] || [ -z "${Log_Last_Sync_Bkp}" ]; then
 		
 		# Test if the script is enabled or in test mode
 		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
 			# Save the date of the last backup (today) in the YYYY-MM-DD format
-			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt"
+			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-LAST-SYNC-BKP.txt"
 		fi
 		
 	fi
@@ -240,27 +243,27 @@ Func-Rsync() {
 		
 		# Test if the script is turned on or off
 		if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
-			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt"
+			echo "${Today_Date}" > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-LAST-SYNC-BKP.txt"
 		fi
 		
-		echo "${Msg_Bkp_Type_Sync}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Bkp_Type_Sync}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 		
 	else
-		echo "${Msg_Bkp_Type_Incr}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Bkp_Type_Incr}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	fi
 	
 	if [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "0" ]; then
 		Rsync_Config+=("--dry-run")
-		echo "${Msg_Bkp_Finish_Off}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-		echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Bkp_Finish_Off}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+		echo "" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	elif [ -n "${St_On_Off}" ] && [ "${St_On_Off}" -eq "1" ]; then
-		echo "${Msg_Bkp_Finish_On}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-		echo "" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
-		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		echo "${Msg_Bkp_Finish_On}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+		echo "" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+		echo "${Msg_Alert2}" >> "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	fi
 	
-	Rsync_Config+=("--include-from=${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
+	Rsync_Config+=("--include-from=${Src_Flash}/${Script_Name}/${Dir_Name}/PATHS.txt" "--exclude=*" "/mnt/user/" "/mnt/disks/${LABEL}")
 	rsync "${Rsync_Config[@]}"
 }
 # END FUNCTION RSYNC ------------------------------------------------
@@ -292,16 +295,16 @@ Func-Unmount() {
 # FUNCTION SEND EMAIL ----------------------------------------------
 Func-Send-Email() {
 	if [ -n "${Send_Email1}" ]; then
-		sendmail "${Send_Email1}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		sendmail "${Send_Email1}" < "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	else
-		sendmail "${Send_Email2}" < "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+		sendmail "${Send_Email2}" < "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	fi
 }
 # END FUNCTION SEND EMAIL ------------------------------------------
 
 # FUNCTION ERROR ----------------------------------------------------
 Func-Error() {	
-cat << EOF > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+cat << EOF > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 
 "${1}"
 
@@ -315,7 +318,7 @@ EOF
 Func-Log() {
 	Today_Date=$(date +%Y-%m-%d)
 	
-cat << EOF > "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt"
+cat << EOF > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 From: "${Send_Email1}"
 To: "${Send_Email1}"
 Cco: "${Send_Email2}"
@@ -329,13 +332,14 @@ EOF
 # FUNCTION CREATE SCRIPT --------------------------------------------
 Func-Create-Script() {
 	Src_Flash="/boot/config/plugins/user.scripts/scripts"
+	Dir_Name=$(echo "${DEVICE}"-"${LABEL}" | sed 's/\///g')
 	
 	if [ ! -d "${Script_Dir}/${Script_Name}" ]; then
 		mkdir "${Script_Dir}/${Script_Name}"
 	fi
 	
-	if [ ! -d "${Script_Dir}/${Script_Name}/${SERIAL}" ]; then
-		mkdir "${Script_Dir}/${Script_Name}/${SERIAL}"
+	if [ ! -d "${Script_Dir}/${Script_Name}/${Dir_Name}" ]; then
+		mkdir "${Script_Dir}/${Script_Name}/${Dir_Name}"
 	fi
 	
 	
@@ -349,37 +353,37 @@ Func-Create-Script() {
 	fi
 	
 	
-	if [ ! -d "${Src_Flash}/${Script_Name}/${SERIAL}" ]; then
-		mkdir "${Src_Flash}/${Script_Name}/${SERIAL}"
+	if [ ! -d "${Src_Flash}/${Script_Name}/${Dir_Name}" ]; then
+		mkdir "${Src_Flash}/${Script_Name}/${Dir_Name}"
 	fi
 	
-	if [ ! -f "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" ]; then
-		touch "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt"
+	if [ ! -f "${Src_Flash}/${Script_Name}/${Dir_Name}/PATHS.txt" ]; then
+		touch "${Src_Flash}/${Script_Name}/${Dir_Name}/PATHS.txt"
 	fi
 }
 # END FUNCTION CREATE SCRIPT ----------------------------------------
 
 # FUNCTION SYNC SCRIPT ----------------------------------------------
 Func-Sync-Script() {
-	if [ -d "${Src_Flash}/${Script_Name}/${SERIAL}" ]; then
+	if [ -d "${Src_Flash}/${Script_Name}/${Dir_Name}" ]; then
 		# Copy "LOG-BKP.txt" and "LOG-LAST-SYNC-BKP.txt" file from "CA User Scripts" to "Script_Dir"
-		cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-BKP.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"
-		cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/LOG-LAST-SYNC-BKP.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"
+		cp -R "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt" "${Script_Dir}/${Script_Name}/${Dir_Name}/"
+		cp -R "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-LAST-SYNC-BKP.txt" "${Script_Dir}/${Script_Name}/${Dir_Name}/"
 		
 		# Copy "PATHS.txt" file from "Script_Dir" to "CA User Scripts"
-		if [ -f "${Script_Dir}/${Script_Name}/${SERIAL}/PATHS.txt" ]; then
-			cp -R "${Script_Dir}/${Script_Name}/${SERIAL}/PATHS.txt" "${Src_Flash}/${Script_Name}/${SERIAL}/"
+		if [ -f "${Script_Dir}/${Script_Name}/${Dir_Name}/PATHS.txt" ]; then
+			cp -R "${Script_Dir}/${Script_Name}/${Dir_Name}/PATHS.txt" "${Src_Flash}/${Script_Name}/${Dir_Name}/"
 		else
-			cp -R "${Src_Flash}/${Script_Name}/${SERIAL}/PATHS.txt" "${Script_Dir}/${Script_Name}/${SERIAL}/"			
+			cp -R "${Src_Flash}/${Script_Name}/${Dir_Name}/PATHS.txt" "${Script_Dir}/${Script_Name}/${Dir_Name}/"			
 		fi
 		
 		if [ -f "/boot/config/plugins/unassigned.devices/${LABEL}.sh" ]; then
-			cp -R "/boot/config/plugins/unassigned.devices/${LABEL}.sh" "${Script_Dir}/${Script_Name}/${SERIAL}/SCRIPT.txt"
+			cp -R "/boot/config/plugins/unassigned.devices/${LABEL}.sh" "${Script_Dir}/${Script_Name}/${Dir_Name}/SCRIPT.txt"
 		fi
 		
 		# Change folder permission
-		chown -R root:users "${Script_Dir}/${Script_Name}/${SERIAL}/"
-		chmod -R 660 "${Script_Dir}/${Script_Name}/${SERIAL}/"
+		chown -R root:users "${Script_Dir}/${Script_Name}/${Dir_Name}/"
+		chmod -R 660 "${Script_Dir}/${Script_Name}/${Dir_Name}/"
 	fi
 }
 # END FUNCTION SYNC SCRIPT ------------------------------------------
