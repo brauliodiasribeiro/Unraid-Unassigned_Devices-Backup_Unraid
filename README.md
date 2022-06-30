@@ -32,9 +32,9 @@
 	- A script will be created in "CA User Scripts / Script_Name"
 	  (Unraid -> Settings -> User Scripts -> Script_Name").
 
-	- The folder and all device files will be created in "Src_Flash / Script_Name / Device Serial"
-	  and a copy in "Script_Dir / Script_Name / Device Serial".
+	- The folder and all device files will be created in "Src_Flash / Script_Name / Device Name"
+	  and a copy in "Script_Dir / Script_Name / Device Name".
 
-	- Add the path of the folders you want to backup in "Script_Dir / Device Serial / PATHS.txt".
+	- Add the path of the folders you want to backup in "Script_Dir / Script_Name / Device Name / PATHS.txt".
 
 	- Run the "script" on each device again to sync all files and start the backup.
