@@ -161,7 +161,9 @@ Day_Sync=90
 
 Send_Email1="test1@gmail.com"
 #Send_Email2="test2@gmail.com"
+#Send_Email_IT="test3@gmail.com"
 		# Send email to. Type between ""
+		# Send_Email_IT = send copies to Team IT. It isn't required
 # END CHANGE THIS VARIABLES -----------------------------------------
 
 # TRANSLATE THIS VARIABLES TO YOUR LANGUAGE -------------------------
@@ -296,8 +298,14 @@ Func-Unmount() {
 Func-Send-Email() {
 	if [ -n "${Send_Email1}" ]; then
 		sendmail "${Send_Email1}" < "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
-	else
+	fi
+	
+	if [ -n "${Send_Email2}" ]; then
 		sendmail "${Send_Email2}" < "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
+	fi
+	
+	if [ -n "${Send_Email_IT}" ]; then
+		sendmail "${Send_Email_IT}" < "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 	fi
 }
 # END FUNCTION SEND EMAIL ------------------------------------------
@@ -321,7 +329,8 @@ Func-Log() {
 cat << EOF > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 From: "${Send_Email1}"
 To: "${Send_Email1}"
-Cco: "${Send_Email2}"
+Cc: "${Send_Email2}"
+Cco: "${Send_Email_IT}"
 Subject: "${Msg_Mail_Subject}"
 "${Msg_Device}" = "${LABEL}"
 "${Msg_Date}" = "${Today_Date}"
@@ -434,7 +443,7 @@ EOF
 case "${ACTION}" in
 'ADD')	
 	# Check if all variables are filled correctly
-	if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && ([ -n "${Send_Email1}" ] || [ -n "${Send_Email2}" ]) && ([ -n "${St_On_Off}" ] && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]))); then	
+	if ([ -d "/boot/config/plugins/user.scripts/scripts" ] && [ -d "${Script_Dir}" ] && [ -n "${Day_Sync}" ] && ([ -n "${Send_Email1}" ] || [ -n "${Send_Email2}" ] || [ -n "${Send_Email_IT}" ]) && ([ -n "${St_On_Off}" ] && ([ "${St_On_Off}" -eq "0" ] || [ "${St_On_Off}" -eq "1" ]))); then	
 		Func-Create-Script
 		Func-Sync-Script
 		Func-Log
