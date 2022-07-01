@@ -87,8 +87,8 @@ arrayStarted=true
 #
 # Each device will have a folder inside the script folder (Script_Name) created in "CA User Scripts".
 # This folder is created automatically when running the script on the device for the first time.
-# The folder name of each device is the (DEVICE NAME + LABEL) that appears on unassigned devices.
-#		- Example: (ST1000LM024_HN-M101MBB_S2RUJ9BD409470) (ST2000DM001-1CH164_Z1E450FD).
+# The folder name of each device is the (the first 10 characters of SERIAL + LABEL) that appears on unassigned devices.
+#		- Example: (ST1000LM02-1TB) (ST2000DM00-2TB).
 #		- The changes to the "PATH.txt" file must be made in the backup folder (Script_Dir), because the script syncs with the "CA User Scripts" folder when it runs.
 #		- The other three files are only backup. If modified, they will not be copied to "CA User Scripts".
 #
