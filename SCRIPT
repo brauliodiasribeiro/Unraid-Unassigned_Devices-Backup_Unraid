@@ -324,7 +324,7 @@ EOF
 
 # FUNCTION LOG ------------------------------------------------------
 Func-Log() {
-	Today_Date=$(date +%Y-%m-%d)
+	Today_Date=$(date +%Y-%m-%d-%T)
 	
 cat << EOF > "${Src_Flash}/${Script_Name}/${Dir_Name}/LOG-BKP.txt"
 From: "${Send_Email1}"
