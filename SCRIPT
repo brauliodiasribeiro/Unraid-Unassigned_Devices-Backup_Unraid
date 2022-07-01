@@ -341,7 +341,7 @@ EOF
 # FUNCTION CREATE SCRIPT --------------------------------------------
 Func-Create-Script() {
 	Src_Flash="/boot/config/plugins/user.scripts/scripts"
-	Dir_Name=$(echo "${DEVICE}"-"${LABEL}" | sed 's/\///g')
+	Dir_Name=$(echo "${SERIAL}" | cut -c1-10)"-${LABEL}"
 	
 	if [ ! -d "${Script_Dir}/${Script_Name}" ]; then
 		mkdir "${Script_Dir}/${Script_Name}"
@@ -423,15 +423,15 @@ Fixed_Device=(
 
 
 # Check if mount is turn on or off ----------------------------
-if [ -n "${St_Mount}" ] && [ "${St_Mount}" -eq "1" ]; then
+if [ -n "\${St_Mount}" ] && [ "\${St_Mount}" -eq "1" ]; then
 	i=0
-	while [ $i -lt "${#Fixed_Device[@]}" ]
+	while [ \$i -lt "\${#Fixed_Device[@]}" ]
 	do
-		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "${Fixed_Device[$i]}"
+		/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned mount "\${Fixed_Device[$i]}"
 		let i++
 	done
 	echo "Mount successful!"
-elif [ -z "${St_Mount}" ] || ([ "${St_Mount}" -ne "0" ] && [ "${St_Mount}" -ne "1" ]); then
+elif [ -z "\${St_Mount}" ] || ([ "\${St_Mount}" -ne "0" ] && [ "\${St_Mount}" -ne "1" ]); then
 	echo "Script not configured correctly! (set 0 or 1 in St_Mount)"
 fi
 # End Check if mount is turn on or off ------------------------
