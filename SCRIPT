@@ -141,7 +141,7 @@ arrayStarted=true
 #####################################################################
 
 # CHANGE THIS VARIABLES ---------------------------------------------
-St_On_Off=0
+St_On_Off=1
  		# TURN THE SCRIPT ON OR OFF. 0 disable backup, 1 enable backup. If set "0" nothing will be modified (copied or deleted)!
 
 Script_Name="bkp_ud"
