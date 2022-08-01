@@ -185,7 +185,7 @@ Msg_Error="Status: Backup not configured for this device"
 
 Msg_Alert1="DON'T DISCONNECT the device from the USB (if connected)"
 Msg_Alert2="Disconnect the device from the USB (if connected)"
-Msg_Alert3="Contact the IT team"
+Msg_Alert3="Contact the TI team"
 # END TRANSLATE THIS VARIABLES TO YOUR LANGUAGE ---------------------
 
 #####################################################################
