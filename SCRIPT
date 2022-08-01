@@ -147,7 +147,7 @@ St_On_Off=1
 Script_Name="bkp_ud"
  		# Script name. It'll be created in "CA user scripts" (Unraid -> Settings -> User Scripts -> "Script_Name") and in the folder "Script_Dir" (Script_Dir/Script_Name). Type between "" without / begin and end
 
-Script_Dir="/mnt/user/bdrtec/Unassigned_Devices_Backup"
+Script_Dir="/mnt/user/Scripts"
 		# Path to backup all files on this device. Type between "" without / begin and end
 
 Day_Sync=90
