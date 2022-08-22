@@ -440,6 +440,11 @@ case "${ACTION}" in
 			Func-Rsync
 			Func-Sync-Script
 			Func-Unmount
+		elfi [ "${St_On_Off}" -eq "0" ]; then
+			# Check if drive mounted
+			if [ -d "${MOUNTPOINT}" ]; then
+				/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
+			fi
 		fi
 	else
 		/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}" -t
