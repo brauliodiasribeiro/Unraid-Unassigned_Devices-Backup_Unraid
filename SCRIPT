@@ -393,7 +393,7 @@ arrayStarted=true
 # -------------------------------------------------------------------
 
 # Turn on or off mount
-St_Mount=0
+St_On_Off=0
 
 
 # Fixed device to mount and backup ----------------------------
@@ -406,7 +406,7 @@ Fixed_Device=(
 
 
 # Check if mount is turn on or off ----------------------------
-if [ -n "\${St_Mount}" ] && [ "\${St_Mount}" -eq "1" ]; then
+if [ -n "\${St_On_Off}" ] && [ "\${St_On_Off}" -eq "1" ]; then
 	i=0
 	while [ \$i -lt "\${#Fixed_Device[@]}" ]
 	do
@@ -414,8 +414,8 @@ if [ -n "\${St_Mount}" ] && [ "\${St_Mount}" -eq "1" ]; then
 		let i++
 	done
 	echo "Mount successful!"
-elif [ -z "\${St_Mount}" ] || ([ "\${St_Mount}" -ne "0" ] && [ "\${St_Mount}" -ne "1" ]); then
-	echo "Script not configured correctly! (set 0 or 1 in St_Mount)"
+elif [ -z "\${St_On_Off}" ] || ([ "\${St_On_Off}" -ne "0" ] && [ "\${St_On_Off}" -ne "1" ]); then
+	echo "Script not configured correctly! (set 0 or 1 in St_On_Off)"
 fi
 # End Check if mount is turn on or off ------------------------
 EOF
@@ -440,11 +440,6 @@ case "${ACTION}" in
 			Func-Rsync
 			Func-Sync-Script
 			Func-Unmount
-		elfi [ "${St_On_Off}" -eq "0" ]; then
-			# Check if drive mounted
-			if [ -d "${MOUNTPOINT}" ]; then
-				/usr/local/emhttp/plugins/unassigned.devices/scripts/rc.unassigned umount "${DEVICE}"
-			fi
 		fi
 	else
 		/usr/local/emhttp/webGui/scripts/notify -s "${Msg_Mail_Subject}" -m "${Msg_Error}" -t
