@@ -19,10 +19,10 @@
 * Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
 
 * Plug & Play: How often to backup is defined in the script.
-- Example: sync backup every 30 days from the last backup.
+	- Example: sync backup every 30 days from the last backup.
 
 * Fixed: How often to backup is defined in the script.
-- Example: sync backup every 30 days from the last backup.
+	- Example: sync backup every 30 days from the last backup.
 
 # INSTRUCTIONS
 * Configure the variables in "script".
@@ -30,10 +30,10 @@
 * Run the "script" on each device for the first time.
 
 * A script will be created in "CA User Scripts / Script_Name"
-- (Unraid -> Settings -> User Scripts -> Script_Name").
+	- (Unraid -> Settings -> User Scripts -> Script_Name").
 
 * The folder and all device files will be created in "Src_Flash / Script_Name / Device Name"
-- (/boot/config/plugins/user.scripts/scripts/Script_Name/Device Name") and a copy in "Script_Dir / Script_Name / Device Name".
+	- (/boot/config/plugins/user.scripts/scripts/Script_Name/Device Name") and a copy in "Script_Dir / Script_Name / Device Name".
 
 * Add the path of the folders you want to backup in "Script_Dir / Script_Name / Device Name / PATHS.txt".
 
