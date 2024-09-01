@@ -19,10 +19,10 @@
 * Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
 
 * Plug & Play: How often to backup is defined in the script.
-* 		Example: sync backup every 30 days from the last backup.
+Example: sync backup every 30 days from the last backup.
 
-* Fixed:	How often to backup is defined in the script.
-		Example: sync backup every 30 days from the last backup.
+* Fixed: How often to backup is defined in the script.
+	Example: sync backup every 30 days from the last backup.
 
 # INSTRUCTIONS
 * Configure the variables in "script".
