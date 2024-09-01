@@ -9,17 +9,17 @@
 # INCREMENTAL BACKUP
 * Don't delete anything from the backup directory, just copy new or modified files.
 
-* Plug & Play:	Just plug the device into USB.
+* Plug & Play: Just plug the device into USB.
 
-* Fixed:	They are already connected but not is mounted.
- 		Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
-		Example: "Schedule Daily" or "Schedule Weekly".
+* Fixed: They are already connected but not is mounted.
+	 Schedule the execution frequency in "CA User Scripts -> Schedule Disabled".
+  	 Example: "Schedule Daily" or "Schedule Weekly".
 
 # SYNC BACKUP
 * Mirroring. If the file isn't in the source directory, it'll be deleted from the backup directory.
 
-* Plug & Play:	How often to backup is defined in the script.
-		Example: sync backup every 30 days from the last backup.
+* Plug & Play: How often to backup is defined in the script.
+* 		Example: sync backup every 30 days from the last backup.
 
 * Fixed:	How often to backup is defined in the script.
 		Example: sync backup every 30 days from the last backup.
