@@ -33,7 +33,7 @@
 	- (Unraid -> Settings -> User Scripts -> Script_Name").
 
 * The folder and all device files will be created in "Src_Flash / Script_Name / Device Name"
-	- (/boot/config/plugins/user.scripts/scripts/Script_Name/Device Name") and a copy in "Script_Dir / Script_Name / Device Name".
+(/boot/config/plugins/user.scripts/scripts/Script_Name/Device Name") and a copy in "Script_Dir / Script_Name / Device Name".
 
 * Add the path of the folders you want to backup in "Script_Dir / Script_Name / Device Name / PATHS.txt".
 
